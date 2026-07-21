@@ -151,7 +151,7 @@
       dockSlot.appendChild(assistantBox);
       const petBanner=document.createElement('div');
       petBanner.className='pet-banner';
-      petBanner.innerHTML='<img src="assets/voltguard-chat-pet.png" alt="전기 에너지를 표현한 귀여운 볼트가드 챗봇 캐릭터"><div><b>볼트가드가 대기 중입니다 <span class="pet-spark">⚡</span></b><span>궁금한 차량 상태를 음성이나 채팅으로 말씀해 주세요.</span></div>';
+      petBanner.innerHTML='<img src="assets/voltguard-chat-pet-female.png" alt="전기 에너지를 표현한 밝은 여성형 볼트가드 AI 안내 캐릭터"><div><b>볼트가드가 대기 중입니다 <span class="pet-spark">⚡</span></b><span>궁금한 차량 상태를 음성이나 채팅으로 말씀해 주세요.</span></div>';
       assistantBox.insertBefore(petBanner,assistantLog);
       const initialExample=assistantLog.querySelector('.assistant-empty');
       if(initialExample)initialExample.innerHTML='예시: “볼트야”라고 먼저 불러 주세요.<br>그 다음 “긴급 알림 상황 알려줘” 또는 “현재 상태 안내해줘”라고 물어보세요.';
