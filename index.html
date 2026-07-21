@@ -124,6 +124,17 @@
         showToast(selectedSupport.department+' 연결을 시작합니다.');
         window.location.href='tel:'+selectedSupport.phone;
       });
+      const standardVoltAnswer=window.voltAnswer;
+      window.voltAnswer=function(raw){
+        const question=(raw||'').trim();
+        if(question.replace(/\s/g,'').includes('좋았어')){
+          appendAssistant('user',question);
+          awaitingVoltQuestion=false;
+          appendAssistant('ai','주인님 더 필요한 건 없으신가요? 요새 교육 받으시느라 수고가 많으십니다. 오늘 저녁 메뉴는 부대찌개랑 계란 장조림, 도시락김, 숙주나물입니다. 열무김치에 쌀밥도 있으니 조금만 더 힘내세요!!');
+          return;
+        }
+        standardVoltAnswer(raw);
+      };
     })();
   </script>
 </body>
