@@ -250,5 +250,76 @@
       };
     })();
   </script>
+  <script>
+    (()=>{
+      const sensorMetrics=[...document.querySelectorAll('#sensors .metric')];
+      const metricUpdates=[
+        ['평균 배터리 온도','42.6<span style="font-size:16px"> °C</span>','기준: 45°C 이하<br><b class="red">14:20 이후 상승 경향</b>','warning_amber','bar critical'],
+        ['최대 셀 전압','402.1<span style="font-size:16px"> V</span>','기준: 400V 미만<br><b class="red">임계값 2.1V 초과</b>','warning_amber','bar critical'],
+        ['냉각 펌프 전류','8.5<span style="font-size:16px"> A</span>','기준: 3A – 8A<br><b class="amber">상한 근접·추적 필요</b>','warning_amber','bar maint']
+      ];
+      sensorMetrics.forEach((card,index)=>{
+        const [label,value,threshold,icon,barClass]=metricUpdates[index];
+        card.querySelector('.metric-top span:first-child').textContent=label;
+        card.querySelector('.metric-top .mi').textContent=icon;
+        card.querySelector('.metric-top .mi').className='mi '+(index===2?'amber':'red');
+        card.querySelector('.metric-value').innerHTML=value;
+        card.querySelector('.metric-value').className='metric-value '+(index===2?'amber':'red');
+        card.querySelector('.bar').className=barClass;
+        card.querySelector('.bar i').style.width=index===0?'85%':index===1?'92%':'81%';
+        card.querySelector('.threshold').innerHTML=threshold;
+      });
+      document.querySelectorAll('#sensors .analysis-cell p').forEach((cell,index)=>{
+        cell.innerHTML=[
+          '<b class="red">42.6°C 평균 / 52.1°C 최고</b> — 14:20 이후 냉각 성능 저하와 함께 상승했습니다.',
+          '<b class="red">402.1V 최고</b> — 모듈 4 전압 편차 경보 구간과 같은 시점에 초과했습니다.',
+          '<b class="amber">8.5A</b> — 냉각 펌프 전류가 상한에 근접했습니다. 하네스·커넥터 점검이 필요합니다.'
+        ][index];
+      });
+      function drawStorylineChart(){
+        const canvas=document.querySelector('#sensorChart');
+        if(!canvas)return;
+        const rect=canvas.getBoundingClientRect(),scale=devicePixelRatio||1;
+        canvas.width=Math.max(1,Math.floor(rect.width*scale));
+        canvas.height=Math.max(1,Math.floor(rect.height*scale));
+        const ctx=canvas.getContext('2d');
+        ctx.setTransform(scale,0,0,scale,0,0);
+        const width=rect.width,height=rect.height,left=90,right=60,top=9,bottom=18,rowHeight=(height-top-bottom)/3;
+        const series=[
+          {label:'평균 온도',unit:'°C',data:[35.6,36.4,37.8,40.1,43.2,47.9,52.1,50.6,48.3,46.8],min:30,max:55,limit:45,color:'#e82429'},
+          {label:'최대 전압',unit:'V',data:[396.4,397.1,397.9,398.6,399.4,400.7,402.1,401.5,400.8,400.2],min:390,max:405,limit:400,color:'#dd7800'},
+          {label:'전류 흐름',unit:'A',data:[3.1,3.5,4.1,5.5,6.9,8.5,8.1,7.4,6.7,6.1],min:0,max:10,limit:8,color:'#1d66ed'}
+        ];
+        ctx.clearRect(0,0,width,height);
+        series.forEach((item,row)=>{
+          const rowTop=top+row*rowHeight,rowBottom=rowTop+rowHeight;
+          ctx.fillStyle=row%2?'#f7f9fb':'#fbfcfd';ctx.fillRect(0,rowTop,width,rowHeight-2);
+          ctx.strokeStyle='#e0e6ee';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,rowBottom-2);ctx.lineTo(width-right,rowBottom-2);ctx.stroke();
+          const y=value=>rowBottom-8-((value-item.min)/(item.max-item.min))*(rowHeight-21);
+          const limitY=y(item.limit);
+          ctx.setLineDash([4,4]);ctx.strokeStyle=item.color+'aa';ctx.beginPath();ctx.moveTo(left,limitY);ctx.lineTo(width-right,limitY);ctx.stroke();ctx.setLineDash([]);
+          ctx.font='700 11px Manrope';ctx.fillStyle='#344050';ctx.fillText(item.label,left-80,rowTop+17);
+          ctx.font='10px DM Mono';ctx.fillStyle='#788394';ctx.fillText('한계 '+item.limit+item.unit,left-80,rowTop+32);
+          ctx.strokeStyle=item.color;ctx.lineWidth=2.6;ctx.beginPath();
+          item.data.forEach((value,index)=>{const x=left+index*(width-left-right)/(item.data.length-1);index?ctx.lineTo(x,y(value)):ctx.moveTo(x,y(value))});ctx.stroke();
+          const last=item.data.at(-1),lastX=width-right,lastY=y(last);
+          ctx.fillStyle=item.color;ctx.beginPath();ctx.arc(lastX,lastY,4,0,Math.PI*2);ctx.fill();
+          ctx.font='700 11px DM Mono';ctx.fillStyle=item.color;ctx.fillText(last.toFixed(1)+item.unit,width-right+8,lastY+4);
+        });
+        ctx.font='10px DM Mono';ctx.fillStyle='#637080';['12:00','13:00','14:00','15:00','16:00','17:00'].forEach((label,index)=>ctx.fillText(label,left+index*(width-left-right-24)/5,height-3));
+      }
+      document.querySelectorAll('#sensors .range-buttons button').forEach(button=>{
+        const replacement=button.cloneNode(true);
+        button.replaceWith(replacement);
+        replacement.addEventListener('click',()=>{
+          document.querySelectorAll('#sensors .range-buttons button').forEach(item=>item.classList.remove('active'));
+          replacement.classList.add('active');
+          drawStorylineChart();
+        });
+      });
+      drawStorylineChart();
+      addEventListener('resize',drawStorylineChart);
+    })();
+  </script>
 </body>
 </html>
