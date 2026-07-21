@@ -31,6 +31,7 @@
     .support-modal{width:min(1080px,100%);max-height:90vh;overflow:auto;background:#f7f8fa;border-radius:7px}.support-hero{padding:25px 28px;background:linear-gradient(135deg,#151d2b,#26344d);color:#fff;display:flex;align-items:center;gap:16px}.support-hero>.mi{display:grid;place-items:center;width:49px;height:49px;background:#e82429;border-radius:50%;font-size:27px}.support-hero h2{font-size:23px;margin:0;letter-spacing:-.05em}.support-hero p{margin:5px 0 0;color:#d9e1ed;font-size:12px}.support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:18px}.support-option{position:relative;min-height:152px;padding:19px;border:1px solid var(--line);border-radius:5px;background:#fff;text-align:left;transition:.18s}.support-option:hover{transform:translateY(-2px);box-shadow:0 9px 20px #0c162012}.support-option .mi{font-size:28px;color:var(--red)}.support-option b{display:block;margin-top:16px;font-size:15px}.support-option small{display:block;margin-top:6px;font-size:11px;line-height:1.5;color:var(--muted)}.support-option .support-dept{position:absolute;right:14px;bottom:13px;color:var(--blue);font-size:10px;font-weight:800}.support-option.selected{border:2px solid var(--red);background:#fff3f2;box-shadow:0 0 0 4px #e8242912}.support-option.selected .support-dept{color:var(--red)}.support-summary{display:flex;align-items:center;gap:12px;margin-top:21px;padding:16px;background:#eaf8f6;border-left:4px solid var(--teal);font-size:12px;line-height:1.55}.support-summary .mi{font-size:24px;color:var(--teal)}.support-summary strong{display:block;color:#007d70;margin-bottom:2px}.support-connect{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:22px}.support-connect .outline-action{border:1px solid var(--line);background:#fff;padding:13px 15px;font-size:12px;font-weight:800}.support-connect .primary-btn:disabled{background:#aeb7c2;cursor:not-allowed;box-shadow:none;transform:none}@media(max-width:720px){.support-modal{position:absolute;inset:0;max-height:none;border-radius:0}.support-hero{padding:21px 19px;align-items:flex-start}.support-grid{grid-template-columns:1fr}.support-option{min-height:126px}.support-connect{position:fixed;left:0;right:0;bottom:0;padding:13px 19px;background:#fff;border-top:1px solid var(--line)}.support-connect .outline-action{display:none}.support-connect .primary-btn{width:100%;justify-content:center}}
     .assistant-dock{position:fixed;top:76px;right:0;bottom:0;z-index:42;width:430px;background:#f7f8fa;border-left:1px solid var(--line);box-shadow:-12px 0 30px #0b142116}.assistant-dock-toggle{width:100%;border:0;border-radius:0;background:var(--navy);color:#fff;padding:15px 18px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:800;text-align:left}.assistant-dock-toggle .dock-meta{display:flex;gap:9px;align-items:center}.assistant-dock-toggle .dock-pulse{width:8px;height:8px;border-radius:50%;background:#49d3c5;box-shadow:0 0 0 5px #49d3c528}.assistant-dock .assistant-box{height:calc(100vh - 124px);min-height:0;border:0;border-radius:0;box-shadow:none}.assistant-dock .assistant-log{min-height:0;max-height:none;padding:24px}.assistant-dock.minimized .assistant-box{display:none}.assistant-dock.minimized{width:238px;bottom:auto}.assistant-dock .scenario-card{display:none}@media(min-width:1024px){main{padding-right:470px}}@media(max-width:1023px){.assistant-dock{width:335px;top:auto;right:18px;bottom:22px;border:0;border-radius:7px;box-shadow:0 14px 26px #0b142124}.assistant-dock-toggle{border-radius:7px 7px 0 0;padding:13px 15px}.assistant-dock .assistant-box{height:430px;border:1px solid var(--line);border-top:0;border-radius:0 0 7px 7px}.assistant-dock.minimized{width:210px}.assistant-dock.minimized .assistant-dock-toggle{border-radius:7px}}@media(max-width:720px){.assistant-dock{right:12px;bottom:76px;width:calc(100vw - 24px);max-width:380px}.assistant-dock .assistant-box{height:420px}.assistant-dock.minimized{width:190px}.assistant-dock-toggle{padding:12px 14px}}
     .assistant-dock .panel-head{font-size:15px;padding:18px}.assistant-dock .message{max-width:92%;padding:15px 17px;font-size:17px;line-height:1.78;border-radius:7px}.assistant-dock .message .sender{font-size:11px;margin-bottom:7px;letter-spacing:.09em}.assistant-dock .assistant-input{padding:17px;gap:10px}.assistant-dock .assistant-input input{font-size:16px;padding:14px 15px}.assistant-dock .send-btn{padding:12px 16px;font-size:15px}.assistant-dock .voice-btn{min-width:48px;padding:12px}.assistant-dock .voice-btn .mi{font-size:25px}@media(max-width:720px){.assistant-dock .message{font-size:16px;padding:14px 15px}.assistant-dock .assistant-input input{font-size:15px}}
+    .threshold-summary{display:flex;gap:9px;flex-wrap:wrap;padding:13px 20px;border-top:1px solid var(--line);background:#fffaf9}.threshold-item{display:inline-flex;align-items:center;gap:6px;padding:7px 9px;border-radius:3px;background:#fff0ef;color:#c31d23;font-size:11px;font-weight:800}.threshold-item .mi{font-size:15px}.threshold-item.safe{background:#eaf8f6;color:#007d70}@media(max-width:720px){.threshold-summary{padding:11px 13px;gap:6px}.threshold-item{font-size:10px}}
   </style>
 </head>
 <body>
@@ -319,6 +320,55 @@
       });
       drawStorylineChart();
       addEventListener('resize',drawStorylineChart);
+    })();
+  </script>
+  <script>
+    (()=>{
+      const chartWrap=document.querySelector('#sensors .chart-wrap');
+      const summary=document.createElement('div');
+      summary.className='threshold-summary';
+      summary.id='thresholdSummary';
+      chartWrap.insertAdjacentElement('afterend',summary);
+      const rangeData={
+        '1시간':{labels:['17:00','17:10','17:20','17:30','17:40','17:50'],temperature:[43.5,44.6,46.2,48.9,52.1,50.6],voltage:[399.1,399.5,400.2,401.2,402.1,401.5],current:[5.8,6.5,7.2,8.0,8.5,8.1]},
+        '6시간':{labels:['12:00','12:40','13:20','14:00','14:40','15:20','16:00','16:40','17:20','18:00'],temperature:[35.6,36.4,37.8,40.1,43.2,47.9,52.1,50.6,48.3,46.8],voltage:[396.4,397.1,397.9,398.6,399.4,400.7,402.1,401.5,400.8,400.2],current:[3.1,3.5,4.1,5.5,6.9,8.5,8.1,7.4,6.7,6.1]},
+        '24시간':{labels:['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00'],temperature:[29.5,30.2,31.0,32.5,34.4,36.1,37.3,39.2,42.6,45.8,49.9,52.1],voltage:[392.8,393.1,393.4,394.0,394.6,395.1,396.0,397.3,398.8,400.2,401.4,402.1],current:[1.8,2.0,2.2,2.5,2.9,3.2,3.7,4.5,5.6,6.8,7.8,8.5]}
+      };
+      let selectedRange='6시간';
+      function renderTimeSeries(){
+        const canvas=document.querySelector('#sensorChart');
+        if(!canvas)return;
+        const set=rangeData[selectedRange],rect=canvas.getBoundingClientRect(),scale=devicePixelRatio||1;
+        canvas.width=Math.max(1,Math.floor(rect.width*scale));canvas.height=Math.max(1,Math.floor(rect.height*scale));
+        const ctx=canvas.getContext('2d');ctx.setTransform(scale,0,0,scale,0,0);
+        const width=rect.width,height=rect.height,left=90,right=60,top=9,bottom=18,rowHeight=(height-top-bottom)/3;
+        const series=[
+          {label:'평균 온도',unit:'°C',data:set.temperature,min:25,max:55,limit:45,color:'#e82429'},
+          {label:'최대 전압',unit:'V',data:set.voltage,min:390,max:405,limit:400,color:'#dd7800'},
+          {label:'전류 흐름',unit:'A',data:set.current,min:0,max:10,limit:8,color:'#1d66ed'}
+        ];
+        ctx.clearRect(0,0,width,height);
+        series.forEach((item,row)=>{
+          const rowTop=top+row*rowHeight,rowBottom=rowTop+rowHeight;
+          const y=value=>rowBottom-8-((value-item.min)/(item.max-item.min))*(rowHeight-21);
+          const limitY=y(item.limit);
+          ctx.fillStyle=row%2?'#f7f9fb':'#fbfcfd';ctx.fillRect(0,rowTop,width,rowHeight-2);
+          ctx.fillStyle=item.color+'12';ctx.fillRect(left,rowTop,width-left-right,Math.max(0,limitY-rowTop));
+          ctx.strokeStyle='#e0e6ee';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(left,rowBottom-2);ctx.lineTo(width-right,rowBottom-2);ctx.stroke();
+          ctx.setLineDash([4,4]);ctx.strokeStyle=item.color+'aa';ctx.beginPath();ctx.moveTo(left,limitY);ctx.lineTo(width-right,limitY);ctx.stroke();ctx.setLineDash([]);
+          ctx.font='700 11px Manrope';ctx.fillStyle='#344050';ctx.fillText(item.label,left-80,rowTop+17);
+          ctx.font='10px DM Mono';ctx.fillStyle='#788394';ctx.fillText('가이드 '+item.limit+item.unit,left-80,rowTop+32);
+          ctx.strokeStyle=item.color;ctx.lineWidth=2.6;ctx.beginPath();item.data.forEach((value,index)=>{const x=left+index*(width-left-right)/(item.data.length-1);index?ctx.lineTo(x,y(value)):ctx.moveTo(x,y(value))});ctx.stroke();
+          const last=item.data.at(-1),lastX=width-right,lastY=y(last);ctx.fillStyle=item.color;ctx.beginPath();ctx.arc(lastX,lastY,4,0,Math.PI*2);ctx.fill();ctx.font='700 11px DM Mono';ctx.fillText(last.toFixed(1)+item.unit,width-right+8,lastY+4);
+        });
+        ctx.font='10px DM Mono';ctx.fillStyle='#637080';set.labels.forEach((label,index)=>{if(index===0||index===set.labels.length-1||index%Math.ceil(set.labels.length/4)===0)ctx.fillText(label,left+index*(width-left-right-24)/(set.labels.length-1),height-3)});
+        summary.innerHTML=series.map(item=>{const count=item.data.filter(value=>value>item.limit).length;return '<span class="threshold-item '+(count?'':'safe')+'"><span class="mi">'+(count?'warning_amber':'check_circle')+'</span>'+item.label+' 가이드 '+item.limit+item.unit+' · '+(count?count+'회 초과':'정상')+'</span>'}).join('');
+      }
+      document.querySelectorAll('#sensors .range-buttons button').forEach(button=>{
+        const replacement=button.cloneNode(true);button.replaceWith(replacement);
+        replacement.addEventListener('click',()=>{selectedRange=replacement.textContent.trim();document.querySelectorAll('#sensors .range-buttons button').forEach(item=>item.classList.toggle('active',item===replacement));renderTimeSeries()});
+      });
+      renderTimeSeries();addEventListener('resize',renderTimeSeries);
     })();
   </script>
 </body>
