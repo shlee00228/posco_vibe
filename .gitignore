@@ -1,2 +1,6 @@
 .vercel
 references/
+.env
+.env.local
+.env.*.local
+!.env.example
