@@ -147,6 +147,9 @@
       const dockToggle=document.querySelector('#assistantDockToggle');
       const dockIcon=document.querySelector('#assistantDockIcon');
       dockSlot.appendChild(assistantBox);
+      const initialExample=assistantLog.querySelector('.assistant-empty');
+      if(initialExample)initialExample.innerHTML='예시: “볼트야”라고 먼저 불러 주세요.<br>그 다음 “긴급 알림 상황 알려줘” 또는 “현재 상태 안내해줘”라고 물어보세요.';
+      assistantInput.placeholder='볼트야, 긴급 알림 상황 알려줘';
       document.querySelectorAll('[data-go="assistant"]').forEach(button=>{
         const focusButton=button.cloneNode(true);
         focusButton.removeAttribute('data-go');
