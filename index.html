@@ -193,5 +193,58 @@
       };
     })();
   </script>
+  <script>
+    (()=>{
+      let hasStartedConversation=false;
+      window.voltAnswer=function(raw){
+        const question=(raw||'').trim();
+        if(!question)return;
+        appendAssistant('user',question);
+        if(!hasStartedConversation){
+          hasStartedConversation=true;
+          appendAssistant('ai','네 주인님 안녕하세요? 오늘도 주인님의 가려운 부분을 시원하게 긁어 드리겠습니다.');
+          return;
+        }
+        if(question.replace(/\s/g,'').includes('좋았어')){
+          appendAssistant('ai','주인님 더 필요한 건 없으신가요? 요새 교육 받으시느라 수고가 많으십니다. 오늘 저녁 메뉴는 부대찌개랑 계란 장조림, 도시락김, 숙주나물입니다. 열무김치에 쌀밥도 있으니 조금만 더 힘내세요!!');
+          return;
+        }
+        window.voltAnswerInternal(question);
+      };
+      window.voltAnswerInternal=function(question){
+        const intent=question.replace(/\s/g,'').toLowerCase();
+        let reply='';
+        let target='';
+        let action=null;
+        if(intent.includes('긴급기술지원')||intent.includes('긴급지원')||intent.includes('기술지원')){
+          reply='<b>긴급 기술 지원을 엽니다.</b><br>상황에 맞는 지원 항목을 선택하면 담당 부서 또는 119 긴급 대응으로 연결할 수 있습니다.';
+          action=()=>document.querySelector('#emergencyBtn').click();
+        }else if(intent.includes('정비이력')||intent.includes('정비내역')||intent.includes('작업이력')||intent.includes('이력')){
+          reply='<b>정비 이력 화면으로 이동합니다.</b><br>아이오닉 5 N의 정비 오더, 담당 팀, 최근 조치 결과를 확인할 수 있습니다.';
+          target='history';
+        }else if(intent.includes('센서')||intent.includes('데이터분석')||intent.includes('온도')||intent.includes('전압')||intent.includes('전류')){
+          reply='<b>센서 데이터 분석 화면으로 이동합니다.</b><br>셀 온도, 전압, 펌프 전류를 기준값과 비교해 이상 구간을 표시합니다.';
+          target='sensors';
+        }else if(intent.includes('시각화')||intent.includes('부위')||intent.includes('냉각루프')||intent.includes('차량그림')){
+          reply='<b>차량 부위 시각화 화면으로 이동합니다.</b><br>배터리 냉각 루프를 활성화해 차량 이미지 위에서 점검 순서와 위험도를 보여드립니다.';
+          target='vehicle-map';
+        }else if(intent.includes('지식베이스')||intent.includes('매뉴얼')||intent.includes('지식')||intent.includes('문헌')||intent.includes('설명서')){
+          reply='<b>지식 베이스 화면으로 이동합니다.</b><br>아이오닉 5 N 공식 매뉴얼과 진단 근거를 확인할 수 있습니다.';
+          target='manual-library';
+        }else if(intent.includes('ai진단')||intent.includes('진단브리핑')||intent.includes('조치가이드')||intent.includes('진단가이드')||intent.includes('아이오닉')||intent.includes('현재상태')||intent.includes('원인')||intent.includes('진단')){
+          reply='<b>AI 진단 브리핑 및 조치 가이드로 이동합니다.</b><br>냉각 루프, 펌프 하네스, 센서 근거와 권장 조치 순서를 보여드립니다.';
+          target='brief';
+        }else if(intent.includes('관제')||intent.includes('대시보드')||intent.includes('긴급알림')||intent.includes('긴급차량')){
+          reply='<b>차량 관제 대시보드로 이동합니다.</b><br>긴급 알림과 아이오닉 5 N의 현재 위험 상태를 확인하세요.';
+          target='dashboard';
+        }else{
+          reply='AI 진단 브리핑, 센서 데이터 분석, 정비 이력, 지식 베이스, 긴급 기술 지원 중 원하는 기능을 말씀해 주세요.';
+        }
+        appendAssistant('ai',reply);
+        if(action)setTimeout(action,650);
+        if(target)setTimeout(()=>go(target),650);
+      };
+    })();
+  </script>
 </body>
 </html>
